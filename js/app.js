@@ -1,6 +1,4 @@
 //variables used throughout the code
-var plyStartX = 200;	//starting Player position.
-var plyStartY = 405;	//starting Player position.
 var i;   				
 var iPts = 0;
 //array of GEM images
@@ -47,8 +45,8 @@ var Player = function() {
     this.sprite = 'images/char-boy.png';
     
 	//player home base
-    this.x = plyStartX;
-	this.y = plyStartY;
+    goStartingGrid(this); 		//go back to starting position when the water is reached
+				    
 }
 
 //Player upate called by the engine to move the player
@@ -71,6 +69,7 @@ Player.prototype.update = function() {
 				checkGems(this.x, this.y);		//check for gem points
 				if (this.y <= max_vert) {
 				    iPts = iPts + 50;			//extra points for reaching the water
+				    goStartingGrid(this); 		//go back to starting position when the water is reached
 				    checkGems(this.x, this.y); 	//check for gem points
 					}
 			}
@@ -131,6 +130,15 @@ Gems.prototype.render = function() {
 
 
 //various functions
+//function used for setting the player to home base
+var goStartingGrid = function(obj) {
+	var plyStartX = 200;	//starting Player X coordinate.
+	var plyStartY = 405;	//starting Player Y coordinate.
+ 
+	obj.x = plyStartX;
+	obj.y = plyStartY;
+}
+
 //Check if the enemy intersects with the player and tae appropriate action
 var checkCollision = function(posX, posY) {
 	//coordinates of the enemy may be sporadic and can be hard to exactly pinpoint
@@ -138,10 +146,9 @@ var checkCollision = function(posX, posY) {
     for (var i=0; i <= 50; i++) {
 	    if ((Math.floor(posX) === (player.x + i)) && (Math.floor(posY) + 11 === player.y)){
 		    iPts = iPts - 100;
-		    player.x = plyStartX;
-			player.y = plyStartY;
+		    goStartingGrid(player); //go back to starting grid
 			
-			randomizeGems();
+			randomizeGems();		//display random gems
 			break;
 		}
     }
